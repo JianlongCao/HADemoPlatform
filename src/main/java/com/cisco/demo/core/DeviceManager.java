@@ -35,7 +35,6 @@ public class DeviceManager implements Observer {
         cmdHander.setCommandList(commBucket).setXmppHelper(sc).start();
         cmdParser.start();
         commBucket.addObserver(this);
-        sc.sendMessage(touser + "@" + server, "test");
     }
 
     @Override
@@ -50,4 +49,8 @@ public class DeviceManager implements Observer {
         cmdParser.stop();
         commBucket.deleteObservers();
 	}
+
+    public static void sendResponse(String msg) {
+        sc.sendMessage(touser+"@"+server, msg);
+    }
 }

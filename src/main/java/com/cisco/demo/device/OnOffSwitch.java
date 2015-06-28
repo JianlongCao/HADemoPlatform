@@ -18,7 +18,7 @@ import java.io.UnsupportedEncodingException;
 
 public class OnOffSwitch extends Device{
 
-    private static boolean state = false;
+    private boolean state = false;
     public static String type = "OnOffSwitch";
 
     public OnOffSwitch(Entity entity) {
@@ -86,5 +86,13 @@ public class OnOffSwitch extends Device{
     @Override
     public Device getOnOffSwitch() {
         return this;
+    }
+
+    public boolean getState() {
+        return state;
+    }
+
+    public void setDefaultState(boolean state) {
+        this.state = state;
     }
 }

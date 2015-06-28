@@ -49,7 +49,7 @@ public class DeviceAttribute {
         JsonObject value;
         String     unit;
         String     timestamp;
-        public Measurement_Value_Light measurement_value_light;
+        public Measurement_Value_Light measurement_value_light = new Measurement_Value_Light();
     }
 
     public static class Measurement_Value_Light {
@@ -84,6 +84,18 @@ public class DeviceAttribute {
 
     public ArrayList<Actuators> getActuators() {
         return actuators;
+    }
+
+    @Override
+    public String toString() {
+        return "DeviceAttribute{" +
+                "authorized=" + authorized +
+                ", id='" + id + '\'' +
+                ", radio='" + radio + '\'' +
+                ", addr='" + addr + '\'' +
+                ", type='" + type + '\'' +
+                ", connected=" + connected +
+                '}';
     }
 }
 

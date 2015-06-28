@@ -15,12 +15,15 @@ public class LevelSwitch extends Device {
         super(entity);
     }
 
+    private short level = 0;
+
     /**
      * { "actuators":[ {"type":"light","state":"enabled", "measurement":[{"value":{"level":0}}]}] }
      *
      * @param level
      */
     public void setLevel(short level) {
+        this.level = level;
         System.out.println("set level");
 
         JSONArray messure_array = new JSONArray();
@@ -67,5 +70,13 @@ public class LevelSwitch extends Device {
     @Override
     public Device getLevelSwitch() {
         return this;
+    }
+
+    public short getLevel() {
+        return level;
+    }
+
+    public void setDefaultLevel(short level) {
+        this.level = level;
     }
 }

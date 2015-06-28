@@ -1,5 +1,6 @@
 package com.cisco.demo.device;
 
+import com.cisco.demo.entity.Entity;
 import com.google.gson.*;
 import org.json.JSONObject;
 
@@ -8,7 +9,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 public class ResponseData {
-    private DeviceAttribute device_attrib;
+    private DeviceAttribute device_attrib = null;
     private String          result;
     private String          href;
     private String          host_port;
@@ -24,8 +25,25 @@ public class ResponseData {
 
         initForArbitraryMeasurements();
 
-
         return device_attrib;
+    }
+
+    public Device[] getDevice() {
+        DeviceAttribute deviceAttribute = getDevice_attrib();
+        Entity entity = new Entity(deviceAttribute.getAddr(), 0, deviceAttribute.getRadio(), deviceAttribute.getId(),
+                deviceAttribute.getType(), deviceAttribute.getType(), false, "", "", "");
+        ArrayList<Device> devices = new ArrayList<>();
+        for(DeviceAttribute.Actuators actuator :deviceAttribute.getActuators()) {
+            if(actuator.type.equalsIgnoreCase(Hue.type)){
+                DeviceAttribute.Measurement_Value value = actuator.measurement_value;
+                Hue hue = new Hue(entity.setStatus(actuator.measurement_state.value));
+                LevelSwitch levelSwitch = (LevelSwitch)hue.getLevelSwitch();
+                levelSwitch.setDefaultLevel(value.measurement_value_light.level);
+                hue.setDefaultHue(value.measurement_value_light.hue).setDefaultSat(value.measurement_value_light.saturation);
+                devices.add(hue);
+            }
+        }
+        return devices.toArray(new Device[devices.size()]);
     }
 
     public String getResult() {

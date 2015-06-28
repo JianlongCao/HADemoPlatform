@@ -24,6 +24,7 @@ public class Hue extends Device {
     private Entity      entity      = null;
     private OnOffSwitch onOffSwitch = null;
     private LevelSwitch levelSwitch = null;
+    private short hue,sat;
 
     public Hue(Entity entity) {
         super(entity);
@@ -117,6 +118,8 @@ public class Hue extends Device {
     //{ "actuators"[ {"type":"light","state":"enabled", "measurement":[{"value":{"hue":200,"saturation":200},
     // "unit":"HSL256"}]}] }
     public void setColor(short hue, short sat) {
+        this.hue = hue;
+        this.sat = sat;
         JSONArray messure_array = new JSONArray();
         JSONObject messure_value = new JSONObject();
         JSONObject color_value = new JSONObject();
@@ -158,5 +161,23 @@ public class Hue extends Device {
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
+    }
+
+    public short getDefaultHue() {
+        return hue;
+    }
+
+    public short getDefaultSat() {
+        return sat;
+    }
+
+    public Hue setDefaultHue(short hue) {
+        this.hue = hue;
+        return this;
+    }
+
+    public Hue setDefaultSat(short sat) {
+        this.sat = sat;
+        return this;
     }
 }

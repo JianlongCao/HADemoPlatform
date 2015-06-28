@@ -38,18 +38,99 @@ public class Entity {
         this.radio = radio;
     }
 
+    public String getIeee() {
+        return ieee;
+    }
+
+    public void setIeee(String ieee) {
+        this.ieee = ieee;
+    }
+
+    public int getDeviceID() {
+        return deviceID;
+    }
+
+    public void setDeviceID(int deviceID) {
+        this.deviceID = deviceID;
+    }
+
+    public String getDeviceName() {
+        return deviceName;
+    }
+
+    public void setDeviceName(String deviceName) {
+        this.deviceName = deviceName;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public Entity setStatus(Boolean status) {
+        this.status = status;
+        return this;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getDesciption() {
+        return desciption;
+    }
+
+    public void setDesciption(String desciption) {
+        this.desciption = desciption;
+    }
+
+    public String getRadio() {
+        return radio;
+    }
+
+    public void setRadio(String radio) {
+        this.radio = radio;
+    }
+
     public String toString() {
 
         String on_off;
-        if(status.booleanValue())
+        if (status.booleanValue())
             on_off = "ON";
         else
-            on_off ="OFF";
+            on_off = "OFF";
 
         String ret = "{ieee:\'" + ieee + "\',id:\'" + deviceID + "\',name:\'"
-                     + deviceName + "\',thumb:\'" + "bulb_yellow.png"
-                     + "\',category:\'" + category + "\',type:\'" + type
-                     + "\',status:\'" + on_off + "\',value:\'" + value + "\'}";
+                + deviceName + "\',thumb:\'" + "bulb_yellow.png"
+                + "\',category:\'" + category + "\',type:\'" + type
+                + "\',status:\'" + on_off + "\',value:\'" + value + "\'}";
         return ret;
     }
 }

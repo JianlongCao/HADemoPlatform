@@ -12,6 +12,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.logging.Level;
 
 public class CmdParser implements Runnable {
 
@@ -66,12 +67,14 @@ public class CmdParser implements Runnable {
 
 
 //        Entity entity = WebUtil.getInstance().getDevice(id);
-        Entity entity = new Entity("12345678", 1, "zb", "test", "testcatorgory", "hue", true, "on", "home","");
         if (cmd.equals("GET")) {
             // GET:SCTPA_ZB_0017880100E7821E_11_RGB
-            getDevice(iEEE,radio);
-            String res = getResopnseString(entity);
-//            cmdHander.sendCmd(res);
+            Device device = getDevice(iEEE,radio);
+            if(device != null) {
+                device.setInfo(id);
+                String res = getResopnseString(device);
+                DeviceManager.sendResponse(res);
+            }
         } else if (cmd.equals("SET")) {
             if (tokens.length < 3) {
                 return;
@@ -107,8 +110,13 @@ public class CmdParser implements Runnable {
 
     }
 
-    private String getResopnseString(Entity entity) {
-        return "";
+    private String getResopnseString(Device device) {
+        String ret = "";
+        if(device instanceof Hue) {
+            Hue hue = (Hue) device;
+            ret = "SET:" + device.getInfo() + ":" + ((LevelSwitch)hue.getLevelSwitch()).getLevel();
+        }
+        return ret;
     }
     private boolean setDevice(String ieee, String name, String value) {
         boolean ret = true;
@@ -167,13 +175,18 @@ public class CmdParser implements Runnable {
             br = new BufferedReader(
                     new InputStreamReader((response.getEntity().getContent())));
             String output;
+            String jsonRes = "";
             System.out.println("Output from Server .... \n");
             while ((output = br.readLine()) != null) {
-                System.out.println(output);
+                jsonRes += output;
             }
+            System.out.println("get response :" + jsonRes);
             Gson gson = new Gson();
-            ResponseData responseData = gson.fromJson(output, ResponseData.class).setJSONRawPacket(output);
-            DeviceAttribute deviceAttribute = responseData.getDevice_attrib();
+            ResponseData responseData = gson.fromJson(jsonRes, ResponseData.class);
+            responseData.setJSONRawPacket(jsonRes);
+            Device[] devices = responseData.getDevice();
+            return devices == null? null : devices[0];
+
         } catch (IOException e) {
             e.printStackTrace();
         }
