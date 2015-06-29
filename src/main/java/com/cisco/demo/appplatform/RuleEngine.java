@@ -6,6 +6,7 @@ import com.cisco.demo.generaladapter.GeneralPlatform;
 import com.cisco.demo.generaladapter.OnOffSwitch;
 import com.cisco.demo.generaladapter.OpenCloseSensor;
 import com.google.gson.Gson;
+import org.jivesoftware.smackx.bytestreams.ibb.packet.Open;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -41,12 +42,17 @@ public class RuleEngine implements Runnable {
                 List<Device> devices = GeneralPlatform.Instance().get(rule.getIf().getAddr(), rule.getIf().getRadio());
                 if (devices == null || devices.isEmpty()) continue;
                 for (Device device : devices) {
-                    if ((action.equals("open") || action.equals("close")) && device instanceof OpenCloseSensor) {
-                        OpenCloseSensor openCloseSensor = (OpenCloseSensor) device;
-                        if (openCloseSensor.getState() == true && action.equals("open") ||
-                                openCloseSensor.getState() == false && action.equals("close")) {
-                            matched = true;
-                            break;
+                    //Action.find()
+                    Rules.Action ruleAction = Rules.Action.get(action);
+                    if(ruleAction != null) {
+                        Rules.ActionBelonging rulesSwitch = Rules.ActionBelonging.getActionBelonging(ruleAction);
+                        if(rulesSwitch == Rules.ActionBelonging.OPENCLOSESENSOR && device instanceof OpenCloseSensor) {
+                            OpenCloseSensor openCloseSensor = (OpenCloseSensor) device;
+                            if (openCloseSensor.getState() == true && ruleAction.getname().equals("open") ||
+                                    openCloseSensor.getState() == false && ruleAction.getname().equals("close")) {
+                                matched = true;
+                                break;
+                            }
                         }
                     }
                 }
@@ -56,12 +62,16 @@ public class RuleEngine implements Runnable {
                 if (devices == null || devices.isEmpty()) continue;
                 action = rule.getThen().getAction();
                 for (Device device : devices) {
-                    if ((action.equals("open") || action.equals("close")) && device instanceof OnOffSwitch) {
+                    Rules.Action ruleAction = Rules.Action.get(action);
+                    Rules.ActionBelonging rulesSwitch = Rules.ActionBelonging.getActionBelonging(ruleAction);
+                    if(rulesSwitch == Rules.ActionBelonging.ONOFFSWITCH && device instanceof OnOffSwitch) {
                         OnOffSwitch onOffSwitch = (OnOffSwitch) device;
-                        if (action.equals("open"))
+                        if (ruleAction.getname().equals("on") && !onOffSwitch.getState())
                             onOffSwitch.turnOn();
-                        else
+                        else if(ruleAction.getname().equals("off") && onOffSwitch.getState())
                             onOffSwitch.turnOff();
+                        else if(ruleAction.getname().equals("blink"))
+                            onOffSwitch.blink(rule.getThen().getBlink_times(),rule.getThen().getBlink_interval());
                     }
                 }
             }

@@ -1,34 +1,31 @@
-{
-  "rules": [
-    {
-      "If": {
+Example:
+when door sensor found door closed, then turn off the light
+
+"If": {
         "addr": "2",
         "action": "close",
-        "name": "ContactSwitch",
+        "name": "DoorSensor",
         "radio": "zw"
       },
-      "Then": {
+"Then": {
         "addr": "0017880100e7821e",
-        "action": "off",
+        "action": "close",
         "name": "Hue",
         "radio": "zb"
-      }
-    },
-    {
-      "If": {
+}
+
+when door sensor found door opened, then blink the light
+"If": {
         "addr": "2",
         "action": "open",
-        "name": "ContactSwitch",
+        "name": "DoorSensor",
         "radio": "zw"
       },
-      "Then": {
+"Then": {
         "addr": "0017880100e7821e",
         "action": "blink",
         "name": "Hue",
         "radio": "zb",
         "blink_interval":200,
-        "blink_times":5
-      }
-    }
-  ]
+        "blink_times:5
 }

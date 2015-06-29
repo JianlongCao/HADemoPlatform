@@ -48,4 +48,16 @@ public class OnOffSwitch extends Device {
         return state;
     }
 
+    public void blink(int times, int interval) {
+        if(times <=0 ) return;
+        for(int i = 0; i< times; i++) {
+            toggle();
+            try {
+                Thread.sleep(interval);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }

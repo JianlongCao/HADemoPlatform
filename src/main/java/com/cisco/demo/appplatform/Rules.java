@@ -1,6 +1,6 @@
 package com.cisco.demo.appplatform;
 
-import java.util.ArrayList;
+import java.util.*;
 
 /**
  * {
@@ -48,6 +48,16 @@ public class Rules {
             private String radio;
             private String action;
             private String name;
+            private int blink_times = 3;
+            private int blink_interval = 200;
+
+            public int getBlink_times() {
+                return blink_times;
+            }
+
+            public int getBlink_interval() {
+                return blink_interval;
+            }
 
             public String getAddr() {
                 return addr;
@@ -74,6 +84,71 @@ public class Rules {
                         ", name='" + name + '\'' +
                         '}';
             }
+        }
+    }
+
+    public enum Action {
+        OPEN("open"),
+        CLOSE("close"),
+        BLINK("blink"),
+        COLOR("color"),
+        LEVEL("level"),
+        ON("on"),
+        OFF("off");
+
+        private final String name;
+        Action(String name) {
+            this.name = name;
+        }
+
+        public String getname() {
+            return this.name;
+        }
+        // Reverse-lookup map for getting a day from an abbreviation
+        private static final Map<String, Action> lookup = new HashMap<String, Action>();
+
+        static {
+            for (Action action : Action.values()) {
+                lookup.put(action.getname(), action);
+            }
+        }
+
+        public static Action get(String name) {
+            return lookup.get(name);
+        }
+
+    }
+
+    public enum ActionBelonging{
+        ONOFFSWITCH("onoffswitch", Action.ON, Action.OFF, Action.BLINK),
+        COLORSWITCH("colorswitch", Action.COLOR),
+        LEVELSWITCH("levelswitch", Action.LEVEL),
+        OPENCLOSESENSOR("openclosesensor", Action.OPEN, Action.CLOSE),;
+
+
+        private String       switchName;
+        private Set<Action> actions;
+
+        ActionBelonging(String switchName, Action... a) {
+            actions = new HashSet<Action>();
+            this.switchName = switchName;
+
+            for(Action action : a) {
+                actions.add(action);
+            }
+        }
+
+        public String getSwitchName() {
+            return this.switchName;
+        }
+
+        public static  ActionBelonging getActionBelonging(Action a) {
+            for(ActionBelonging actionBelonging : ActionBelonging.values()) {
+                if(actionBelonging.actions.contains(a)) {
+                    return actionBelonging;
+                }
+            }
+            return null;
         }
     }
 
