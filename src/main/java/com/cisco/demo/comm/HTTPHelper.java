@@ -15,11 +15,12 @@ import java.io.UnsupportedEncodingException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingDeque;
 
 public class HTTPHelper implements Runnable{
 
     private static boolean                        running  = false;
-    private        ConcurrentLinkedQueue<HttpCmd> cmdLists = new ConcurrentLinkedQueue<>();
+    private LinkedBlockingDeque<HttpCmd> cmdLists = new LinkedBlockingDeque<>();
     private static HTTPHelper httpHelper = null;
 
     public static HTTPHelper Instance() {
@@ -44,8 +45,12 @@ public class HTTPHelper implements Runnable{
     @Override
     public void run() {
         while(running) {
-            if(cmdLists.isEmpty()) continue;
-            HttpCmd httpCmd = cmdLists.poll();
+            HttpCmd httpCmd = null;
+            try {
+                httpCmd = cmdLists.take();
+            } catch (InterruptedException e) {
+                continue;
+            }
 //            excuteHTTPCmd(httpCmd);
             excuteHTTPCmdAsync(httpCmd);
         }
@@ -56,8 +61,9 @@ public class HTTPHelper implements Runnable{
             this.start();
         }
 
-        if(cmd != null)
+        if(cmd != null) {
             cmdLists.add(cmd);
+        }
     }
 
     public HttpResponse excuteHTTPCmd(HttpCmd cmd) {

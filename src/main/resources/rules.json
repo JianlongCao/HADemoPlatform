@@ -1,0 +1,32 @@
+{
+  "rules": [
+    {
+      "If": {
+        "addr": "2",
+        "action": "open",
+        "name": "ContactSwitch",
+        "radio": "zw"
+      },
+      "Then": {
+        "addr": "0017880100e7821e",
+        "action": "open",
+        "name": "Hue",
+        "radio": "zb"
+      }
+    },
+    {
+      "If": {
+        "addr": "2",
+        "action": "close",
+        "name": "ContactSwitch",
+        "radio": "zw"
+      },
+      "Then": {
+        "addr": "0017880100e7821e",
+        "action": "close",
+        "name": "Hue",
+        "radio": "zb"
+      }
+    }
+  ]
+}

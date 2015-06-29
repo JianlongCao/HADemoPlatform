@@ -1,6 +1,7 @@
 package com.cisco.demo.core;
 
 import com.cisco.demo.appplatform.OpenHabPlatform;
+import com.cisco.demo.appplatform.RuleEngine;
 
 import java.util.Scanner;
 
@@ -47,16 +48,36 @@ public class MainActivity {
 //            JsonObject object1 = (JsonObject)jsonElementIterator.next();
 //            System.out.println(object1);
 //        }
+
+
         OpenHabPlatform openHabPlatform = new OpenHabPlatform();
         openHabPlatform.start();
+
+        RuleEngine ruleEngine = new RuleEngine();
+        ruleEngine.populateRules("rules.json");
+
+        ruleEngine.start();
 
         Scanner keyboard = new Scanner(System.in);
         System.out.println("enter something to exit");
         String myint = keyboard.nextLine();
 
+        ruleEngine.stop();
         openHabPlatform.stop();
 
 
+        //palyground
+//        String json = "{\n\t\"device_attrib\":\t{\n\t\t\"id\":\t\"\",\n\t\t\"radio\":\t\"zw\",\n\t\t\"addr\":\t\"4\",\n\t\t\"type\":\t\"\",\n\t\t\"connected\":\ttrue,\n\t\t\"authorized\":\tfalse,\n\t\t\"sensors\":\t[{\n\t\t\t\t\"type\":\t\"openclose\",\n\t\t\t\t\"state\":\t\"enabled\",\n\t\t\t\t\"measurement\":\t[{\n\t\t\t\t\t\t\"value\":\tfalse,\n\t\t\t\t\t\t\"unit\":\t\"\",\n\t\t\t\t\t\t\"timestamp\":\t\"2000-01-04:00:09:37.+0000\",\n\t\t\t\t\t\t\"name\":\t\"state\"\n\t\t\t\t\t}],\n\t\t\t\t\"subtype\":\t\"1\"\n\t\t\t}, {\n\t\t\t\t\"type\":\t\"battery\",\n\t\t\t\t\"state\":\t\"enabled\",\n\t\t\t\t\"measurement\":\t[{\n\t\t\t\t\t\t\"value\":\t80,\n\t\t\t\t\t\t\"unit\":\t\"%\",\n\t\t\t\t\t\t\"timestamp\":\t\"2000-01-04:00:09:37.+0000\",\n\t\t\t\t\t\t\"name\":\t\"battery\"\n\t\t\t\t\t}],\n\t\t\t\t\"subtype\":\t\"1\"\n\t\t\t}],\n\t\t\"actuators\":\t[]\n\t},\n\t\"result\":\t\"success\",\n\t\"href\":\t[\"/devices/zw/4\"],\n\t\"host_port\":\t\"http://fe80::205:4ff:fe03:201:8090\",\n\t\"timestamp\":\t\"2000-01-04T00:09:37Z\"\n}";
+//
+//                Gson gson = new Gson();
+//        SctpaResponse responseData = gson.fromJson(json, SctpaResponse.class).setJSONRawPacket(json);
+//        responseData.getDevice();
+//        DeviceAttribute deviceAttribute = responseData.getDevice_attrib();
+
     }
+
+
+
+
 
 }

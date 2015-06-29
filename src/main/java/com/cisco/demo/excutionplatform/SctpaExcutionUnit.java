@@ -4,14 +4,17 @@ import com.cisco.demo.comm.HTTPHelper;
 import com.cisco.demo.comm.HttpCmd;
 import com.cisco.demo.core.consts;
 import com.cisco.demo.generaladapter.Device;
+import com.cisco.demo.generaladapter.OpenCloseSensor;
 import com.google.gson.Gson;
 import org.apache.http.HttpResponse;
+import org.jivesoftware.smackx.bytestreams.ibb.packet.Open;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,9 +71,9 @@ public class SctpaExcutionUnit implements ExcutionUnit{
 
     @Override
     public List<Device> get(String addr, String radio) {
-        HttpResponse response = HTTPHelper.Instance().excuteHTTPCmd(new HttpCmd("get",
-                consts.SERVERIP+"/devices/"+radio +"/"
-                        +addr,""));
+        String uri = consts.SERVERIP + "/devices/" + radio + "/"
+                + addr;
+        HttpResponse response = HTTPHelper.Instance().excuteHTTPCmd(new HttpCmd("get", uri, ""));
         if (response == null || response.getStatusLine().getStatusCode() != 200) {
             System.out.println("ERROR:Sctpa Server not available or get error response");
             return null;
@@ -84,7 +87,7 @@ public class SctpaExcutionUnit implements ExcutionUnit{
             while ((output = br.readLine()) != null) {
                 jsonRes += output;
             }
-            System.out.println("From SCTPA :" + jsonRes);
+//            System.out.println("From SCTPA :" + jsonRes);
             Gson gson = new Gson();
             SctpaResponse responseData = gson.fromJson(jsonRes, SctpaResponse.class);
             responseData.setJSONRawPacket(jsonRes);

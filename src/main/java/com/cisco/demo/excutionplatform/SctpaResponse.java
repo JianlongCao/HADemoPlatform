@@ -1,9 +1,6 @@
 package com.cisco.demo.excutionplatform;
 
-import com.cisco.demo.generaladapter.ColorSwitch;
-import com.cisco.demo.generaladapter.Device;
-import com.cisco.demo.generaladapter.LevelSwitch;
-import com.cisco.demo.generaladapter.OnOffSwitch;
+import com.cisco.demo.generaladapter.*;
 import com.google.gson.*;
 
 import java.util.ArrayList;
@@ -12,7 +9,7 @@ import java.util.Iterator;
 public class SctpaResponse {
     private SctpaDeviceAttribute device_attrib = null;
     private String          result;
-    private String          href;
+//    private String          href;
     private String          host_port;
     private String          timestamp;
     private String          json="";
@@ -55,16 +52,29 @@ public class SctpaResponse {
             }
 
         }
+
+        for(SctpaDeviceAttribute.Sensors sensor :deviceAttribute.getSensors()) {
+            if(sensor.type.equalsIgnoreCase("openclose")){
+                if(sensor.measurement != null) {
+                    for(SctpaDeviceAttribute.Measurement_Sensor measurement_sensor : sensor.measurement) {
+                        if(measurement_sensor.name.equalsIgnoreCase("state")) {
+                            if((Boolean)measurement_sensor.value instanceof  Boolean)
+                                devices.add(new OpenCloseSensor(deviceAttribute.getAddr(),deviceAttribute.getRadio(),"",(Boolean)measurement_sensor.value));
+                        }
+                    }
+                }
+            }
+        }
         return devices;
     }
 
     public String getResult() {
         return result;
     }
-
-    public String getHref() {
-        return href;
-    }
+//
+//    public String getHref() {
+//        return href;
+//    }
 
     public String getHost_port() {
         return host_port;

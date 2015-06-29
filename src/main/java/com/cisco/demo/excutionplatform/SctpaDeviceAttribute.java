@@ -13,7 +13,7 @@ public class SctpaDeviceAttribute {
     boolean authorized;
 
     ArrayList<Actuators> actuators = new ArrayList<>();
-//    ArrayList<Sensors>   sensors;
+    ArrayList<Sensors>   sensors = new ArrayList<>();
 
     public static class Actuators {
         String                type;
@@ -28,13 +28,20 @@ public class SctpaDeviceAttribute {
     public static class Sensors {
         String                type;
         String                state;
-        ArrayList<JsonObject> measurements;
+        ArrayList<Measurement_Sensor> measurement = null;
         String                subtype;
     }
 
 //    public static class Measurement {
 //        ArrayList<JsonElement>
 //    }
+
+    public static class Measurement_Sensor {
+        Object value;
+        String unit;
+        String timestamp;
+        String name;
+    }
 
     public static class Measurement_State {
         boolean value;
@@ -82,6 +89,10 @@ public class SctpaDeviceAttribute {
 
     public ArrayList<Actuators> getActuators() {
         return actuators;
+    }
+
+    public ArrayList<Sensors> getSensors() {
+        return sensors;
     }
 
     @Override

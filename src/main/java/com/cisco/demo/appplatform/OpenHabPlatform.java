@@ -8,16 +8,16 @@ import org.jivesoftware.smack.packet.Message;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.LinkedBlockingDeque;
 
 public class OpenHabPlatform implements appInterface, Runnable{
     private SimpleXMPPClient client = null;
-    private ConcurrentLinkedDeque<String> cmdLists = null;
+    private LinkedBlockingDeque<String> cmdLists = null;
     boolean running = false;
 
     public OpenHabPlatform() {
         client = new SimpleXMPPClient(consts.XMPPFROMUSER + "@" + consts.XMPPSERVER, consts.XMPPPWD);
-        cmdLists = new ConcurrentLinkedDeque<>();
+        cmdLists = new LinkedBlockingDeque<>();
     }
 
     @Override
@@ -55,8 +55,13 @@ public class OpenHabPlatform implements appInterface, Runnable{
         @Override
         public void run() {
             while(running) {
-                if(cmdLists.isEmpty())continue;
-                String msg = cmdLists.poll();
+
+                String msg = null;
+                try {
+                    msg = cmdLists.take();
+                } catch (InterruptedException e) {
+                    continue;
+                }
                 String[] tokens = msg.split(":");
                 if (tokens.length < 2) {
                     System.out.println("Wrong command " + msg);
