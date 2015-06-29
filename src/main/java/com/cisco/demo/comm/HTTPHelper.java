@@ -105,7 +105,6 @@ public class HTTPHelper implements Runnable{
                     cmd.getUri().toLowerCase());
             try {
                 StringEntity input = new StringEntity(cmd.getEntity());
-                System.out.println("To :" + cmd.getUri() + " put: " + cmd.getEntity());
                 input.setContentType("application/json");
                 httpput.setEntity(input);
                 httpclient.execute(httpput, null);

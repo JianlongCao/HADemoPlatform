@@ -1,12 +1,10 @@
-package com.cisco.demo.device;
+package com.cisco.demo.excutionplatform;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class DeviceAttribute {
+public class SctpaDeviceAttribute {
     String  id;
     String  radio;
     String  addr;
@@ -22,8 +20,8 @@ public class DeviceAttribute {
         String                state;
         ArrayList<JsonObject> measurement;
         String                subtype;
-        Measurement_State measurement_state = new Measurement_State();
-        Measurement_Value measurement_value = new Measurement_Value();
+        Measurement_State measurement_state = null;
+        Measurement_Value measurement_value = null;
 
     }
 
@@ -49,7 +47,7 @@ public class DeviceAttribute {
         JsonObject value;
         String     unit;
         String     timestamp;
-        public Measurement_Value_Light measurement_value_light = new Measurement_Value_Light();
+        public Measurement_Value_Light measurement_value_light = null;
     }
 
     public static class Measurement_Value_Light {

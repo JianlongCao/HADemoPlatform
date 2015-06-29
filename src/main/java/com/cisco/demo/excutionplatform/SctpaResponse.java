@@ -1,49 +1,61 @@
-package com.cisco.demo.device;
+package com.cisco.demo.excutionplatform;
 
-import com.cisco.demo.entity.Entity;
+import com.cisco.demo.generaladapter.ColorSwitch;
+import com.cisco.demo.generaladapter.Device;
+import com.cisco.demo.generaladapter.LevelSwitch;
+import com.cisco.demo.generaladapter.OnOffSwitch;
 import com.google.gson.*;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 
-public class ResponseData {
-    private DeviceAttribute device_attrib = null;
+public class SctpaResponse {
+    private SctpaDeviceAttribute device_attrib = null;
     private String          result;
     private String          href;
     private String          host_port;
     private String          timestamp;
     private String          json="";
 
-    public ResponseData setJSONRawPacket(String json) {
+    public SctpaResponse setJSONRawPacket(String json) {
         this.json = json;
         return this;
     }
 
-    public DeviceAttribute getDevice_attrib() {
+    public SctpaDeviceAttribute getDevice_attrib() {
 
         initForArbitraryMeasurements();
 
         return device_attrib;
     }
 
-    public Device[] getDevice() {
-        DeviceAttribute deviceAttribute = getDevice_attrib();
-        Entity entity = new Entity(deviceAttribute.getAddr(), 0, deviceAttribute.getRadio(), deviceAttribute.getId(),
-                deviceAttribute.getType(), deviceAttribute.getType(), false, "", "", "");
+    public ArrayList<Device> getDevice() {
+        SctpaDeviceAttribute deviceAttribute = getDevice_attrib();
         ArrayList<Device> devices = new ArrayList<>();
-        for(DeviceAttribute.Actuators actuator :deviceAttribute.getActuators()) {
-            if(actuator.type.equalsIgnoreCase(Hue.type)){
-                DeviceAttribute.Measurement_Value value = actuator.measurement_value;
-                Hue hue = new Hue(entity.setStatus(actuator.measurement_state.value));
-                LevelSwitch levelSwitch = (LevelSwitch)hue.getLevelSwitch();
-                levelSwitch.setDefaultLevel(value.measurement_value_light.level);
-                hue.setDefaultHue(value.measurement_value_light.hue).setDefaultSat(value.measurement_value_light.saturation);
-                devices.add(hue);
+        for(SctpaDeviceAttribute.Actuators actuator :deviceAttribute.getActuators()) {
+            if(actuator.measurement_state != null){
+                OnOffSwitch onOffSwitch = new OnOffSwitch(deviceAttribute.getAddr(), deviceAttribute.getRadio(), actuator.type, actuator.measurement_state.value);
+                devices.add(onOffSwitch);
             }
+            if(actuator.measurement_value != null) {
+                if(actuator.measurement_value.measurement_value_light!=null){
+                    ColorSwitch colorSwitch = new ColorSwitch(deviceAttribute.getAddr(),
+                            deviceAttribute.getRadio(),
+                            actuator.type,
+                            (int)(actuator.measurement_value.measurement_value_light.hue*360.0/255),
+                            (int)(actuator.measurement_value.measurement_value_light.saturation*1.0/255*100),
+                            (int)(actuator.measurement_value.measurement_value_light.level * 1.0 / 255 * 100));
+                    devices.add(colorSwitch);
+                    LevelSwitch levelSwitch = new LevelSwitch(deviceAttribute.getAddr(),
+                            deviceAttribute.getRadio(),
+                            actuator.type,
+                            (int)(actuator.measurement_value.measurement_value_light.level * 1.0 / 255 * 100));
+                    devices.add(levelSwitch);
+                }
+            }
+
         }
-        return devices.toArray(new Device[devices.size()]);
+        return devices;
     }
 
     public String getResult() {
@@ -95,27 +107,31 @@ public class ResponseData {
                 int measurement_index = 0;
                 while(measurementsIterator.hasNext()) {
                     JsonObject measurement = measurementsIterator.next().getAsJsonObject();
-                    System.out.println(measurement.toString());
+//                    System.out.println(measurement.toString());
                     JsonElement obj_name = measurement.get("name");
                     if(measurement.toString().contains("level") || measurement.toString().contains("hue")) {
-                        System.out.println("light value");
+//                        System.out.println("light value");
                         device_attrib.getActuators().get(actuator_index).measurement.set(measurement_index, measurement);
 
                         Gson gson = new Gson();
-                        DeviceAttribute.Measurement_Value_Light light = gson.fromJson(measurement.get("value").toString(),
-                                                                                DeviceAttribute.Measurement_Value_Light
+                        SctpaDeviceAttribute.Measurement_Value_Light light = gson.fromJson(measurement.get("value").toString(),
+                                                                                SctpaDeviceAttribute.Measurement_Value_Light
                                                                                         .class);
+                        if(light == null) continue;
+                        if(device_attrib.getActuators().get(actuator_index).measurement_value == null)
+                            device_attrib.getActuators().get(actuator_index).measurement_value = new SctpaDeviceAttribute.Measurement_Value();
                         device_attrib.getActuators().get(actuator_index).measurement_value.measurement_value_light = light;
                     }
                     if(obj_name != null && obj_name.getAsString().equals("state")){
-                        System.out.println("state member");
+//                        System.out.println("state member");
                         Gson gson = new Gson();
-                        DeviceAttribute.Measurement_State state = gson.fromJson(measurement.toString(),
-                                                                                DeviceAttribute.Measurement_State
+                        SctpaDeviceAttribute.Measurement_State state = gson.fromJson(measurement.toString(),
+                                                                                SctpaDeviceAttribute.Measurement_State
                                 .class);
+                        if(state == null) continue;
                         device_attrib.getActuators().get(actuator_index).measurement_state = state;
-                        System.out.println("state value :" + device_attrib.getActuators().get(actuator_index)
-                                .measurement_state.value);
+//                        System.out.println("state value :" + device_attrib.getActuators().get(actuator_index)
+//                                .measurement_state.value);
                         device_attrib.getActuators().get(actuator_index).measurement.set(measurement_index,measurement);
                     }
 
