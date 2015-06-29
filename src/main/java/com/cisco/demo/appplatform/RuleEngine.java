@@ -6,7 +6,6 @@ import com.cisco.demo.generaladapter.GeneralPlatform;
 import com.cisco.demo.generaladapter.OnOffSwitch;
 import com.cisco.demo.generaladapter.OpenCloseSensor;
 import com.google.gson.Gson;
-import org.jivesoftware.smackx.bytestreams.ibb.packet.Open;
 
 import java.util.LinkedList;
 import java.util.List;

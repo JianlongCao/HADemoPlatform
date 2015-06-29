@@ -2,19 +2,16 @@ package com.cisco.demo.excutionplatform;
 
 import com.cisco.demo.comm.HTTPHelper;
 import com.cisco.demo.comm.HttpCmd;
-import com.cisco.demo.core.consts;
+import com.cisco.demo.core.Settings;
 import com.cisco.demo.generaladapter.Device;
-import com.cisco.demo.generaladapter.OpenCloseSensor;
 import com.google.gson.Gson;
 import org.apache.http.HttpResponse;
-import org.jivesoftware.smackx.bytestreams.ibb.packet.Open;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +19,7 @@ import java.util.Map;
 public class SctpaExcutionUnit implements ExcutionUnit{
 
     private Device device = null;
+    String serverIP = Settings.Instance().getGlobalConfig().getSctpa().getSERVERIP();
 
     public SctpaExcutionUnit(Device device) {
         this.device = device;
@@ -71,7 +69,7 @@ public class SctpaExcutionUnit implements ExcutionUnit{
 
     @Override
     public List<Device> get(String addr, String radio) {
-        String uri = consts.SERVERIP + "/devices/" + radio + "/"
+        String uri = serverIP + "/devices/" + radio + "/"
                 + addr;
         HttpResponse response = HTTPHelper.Instance().excuteHTTPCmd(new HttpCmd("get", uri, ""));
         if (response == null || response.getStatusLine().getStatusCode() != 200) {
@@ -128,7 +126,7 @@ public class SctpaExcutionUnit implements ExcutionUnit{
         actuators_root.put("actuators",actuators_array);
 
         System.out.println("To SCTPA :" + actuators_root.toString());
-        HttpCmd httpCmd = new HttpCmd("put", consts.SERVERIP + "/devices/" + device.getRadio()+ "/" + device.getAddr(), actuators_root.toString());
+        HttpCmd httpCmd = new HttpCmd("put", serverIP + "/devices/" + device.getRadio()+ "/" + device.getAddr(), actuators_root.toString());
         HTTPHelper.Instance().addCmd(httpCmd);
 
     }

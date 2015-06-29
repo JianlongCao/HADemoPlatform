@@ -1,0 +1,15 @@
+{
+  "sctpa":{
+    "SERVERIP" : "http://64.104.161.59:8090"
+  },
+
+  "EXCUTIONUNIT" : "sctpa",
+
+  "openhab": {
+    "XMPPSERVER": "173.39.210.33",
+    "XMPPPORT": 5222,
+    "XMPPFROMUSER": "clg002",
+    "XMPPTOUSER": "clg003",
+    "XMPPPWD": "Cisco123!"
+  }
+}

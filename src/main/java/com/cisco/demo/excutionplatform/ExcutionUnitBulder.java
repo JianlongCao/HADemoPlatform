@@ -1,6 +1,6 @@
 package com.cisco.demo.excutionplatform;
 
-import com.cisco.demo.core.consts;
+import com.cisco.demo.core.Settings;
 import com.cisco.demo.generaladapter.Device;
 
 public class ExcutionUnitBulder {
@@ -16,7 +16,8 @@ public class ExcutionUnitBulder {
     }
 
     public ExcutionUnit builder() {
-        if(consts.EXCUTIONUNIT.equalsIgnoreCase("sctpa")) {
+        String eu = Settings.Instance().getGlobalConfig().getEXCUTIONUNIT();
+        if(eu.equalsIgnoreCase("sctpa")) {
             return new SctpaExcutionUnit(device);
         }
         else return null;

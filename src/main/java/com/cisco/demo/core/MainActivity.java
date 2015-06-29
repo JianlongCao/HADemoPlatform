@@ -4,6 +4,7 @@ import com.cisco.demo.appplatform.OpenHabPlatform;
 import com.cisco.demo.appplatform.RuleEngine;
 
 import java.util.Scanner;
+import java.util.Set;
 
 public class MainActivity {
 
@@ -48,7 +49,6 @@ public class MainActivity {
 //            JsonObject object1 = (JsonObject)jsonElementIterator.next();
 //            System.out.println(object1);
 //        }
-
 
         OpenHabPlatform openHabPlatform = new OpenHabPlatform();
         openHabPlatform.start();

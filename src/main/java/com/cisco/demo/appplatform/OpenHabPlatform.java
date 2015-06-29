@@ -1,7 +1,7 @@
 package com.cisco.demo.appplatform;
 
 import com.cisco.demo.comm.SimpleXMPPClient;
-import com.cisco.demo.core.consts;
+import com.cisco.demo.core.Settings;
 import com.cisco.demo.generaladapter.*;
 import org.jivesoftware.smack.packet.Message;
 
@@ -14,9 +14,14 @@ public class OpenHabPlatform implements appInterface, Runnable{
     private SimpleXMPPClient client = null;
     private LinkedBlockingDeque<String> cmdLists = null;
     boolean running = false;
+    String user = Settings.Instance().getGlobalConfig().getOpenhab().getXMPPFROMUSER();
+    String server = Settings.Instance().getGlobalConfig().getOpenhab().getXMPPSERVER();
+    String pwd = Settings.Instance().getGlobalConfig().getOpenhab().getXMPPPWD();
+    String touser = Settings.Instance().getGlobalConfig().getOpenhab().getXMPPTOUSER();
 
     public OpenHabPlatform() {
-        client = new SimpleXMPPClient(consts.XMPPFROMUSER + "@" + consts.XMPPSERVER, consts.XMPPPWD);
+
+        client = new SimpleXMPPClient(user + "@" + server, pwd);
         cmdLists = new LinkedBlockingDeque<>();
     }
 
@@ -96,7 +101,7 @@ public class OpenHabPlatform implements appInterface, Runnable{
                         } else {
                             continue;
                         }
-                        client.sendMessage(consts.XMPPTOUSER + "@" + consts.XMPPSERVER, ret);
+                        client.sendMessage(touser + "@" + server, ret);
                         System.out.println("To OpenHab:" + ret);
                     }
                 } else if(cmd.equalsIgnoreCase("set")) {

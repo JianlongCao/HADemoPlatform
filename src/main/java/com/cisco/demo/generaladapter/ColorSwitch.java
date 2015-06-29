@@ -134,13 +134,13 @@ public class ColorSwitch extends Device {
 //
 //        System.out.println(actuators_root);
 //
-//        HttpCmd httpCmd = new HttpCmd("put", consts.SERVERIP + "/devices/" + getParent().getRadio()+ "/" + getParent
+//        HttpCmd httpCmd = new HttpCmd("put", consts1.SERVERIP + "/devices/" + getParent().getRadio()+ "/" + getParent
 //                ().getIEEE(), actuators_root.toString());
 //        HTTPHelper.Instance().addCmd(httpCmd);
 ////
 ////        HttpClient client = HttpClientBuilder.create().build();
 ////        HttpPut httpput = new HttpPut(
-////                consts.SERVERIP + "/devices/" + getParent().getRadio()+ "/" + getParent().getIEEE());
+////                consts1.SERVERIP + "/devices/" + getParent().getRadio()+ "/" + getParent().getIEEE());
 ////        try {
 ////            StringEntity input = new StringEntity(actuators_root.toString());
 ////            input.setContentType("application/json");
