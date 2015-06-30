@@ -1,12 +1,12 @@
 package com.cisco.demo.appplatform;
 
 import com.cisco.demo.core.Utils;
-import com.cisco.demo.generaladapter.Device;
-import com.cisco.demo.generaladapter.GeneralPlatform;
-import com.cisco.demo.generaladapter.OnOffSwitch;
-import com.cisco.demo.generaladapter.OpenCloseSensor;
+import com.cisco.demo.generaladapter.*;
 import com.google.gson.Gson;
 
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -38,6 +38,7 @@ public class RuleEngine implements Runnable {
             for (Rules.SimpleRule rule : rules) {
                 boolean matched = false;
                 String action = rule.getIf().getAction();
+
                 List<Device> devices = GeneralPlatform.Instance().get(rule.getIf().getAddr(), rule.getIf().getRadio());
                 if (devices == null || devices.isEmpty()) continue;
                 for (Device device : devices) {
@@ -57,11 +58,16 @@ public class RuleEngine implements Runnable {
                 }
                 if (!matched) continue;
 
+
+                action = rule.getThen().getAction();
+                if(action == null) continue;
                 devices = GeneralPlatform.Instance().get(rule.getThen().getAddr(), rule.getThen().getRadio());
                 if (devices == null || devices.isEmpty()) continue;
-                action = rule.getThen().getAction();
+
+
                 for (Device device : devices) {
                     Rules.Action ruleAction = Rules.Action.get(action);
+                    if(ruleAction == null) break;
                     Rules.ActionBelonging rulesSwitch = Rules.ActionBelonging.getActionBelonging(ruleAction);
                     if(rulesSwitch == Rules.ActionBelonging.ONOFFSWITCH && device instanceof OnOffSwitch) {
                         OnOffSwitch onOffSwitch = (OnOffSwitch) device;
@@ -71,6 +77,15 @@ public class RuleEngine implements Runnable {
                             onOffSwitch.turnOff();
                         else if(ruleAction.getname().equals("blink"))
                             onOffSwitch.blink(rule.getThen().getBlink_times(),rule.getThen().getBlink_interval());
+                    }
+                    else if (rulesSwitch == Rules.ActionBelonging.COLORSWITCH && device instanceof ColorSwitch) {
+                        ColorSwitch colorSwitch = (ColorSwitch) device;
+                        if(ruleAction == Rules.Action.RED && !colorSwitch.isColor(ColorSwitch.COLOR.RED))
+                            colorSwitch.setColor(ColorSwitch.COLOR.RED);
+                        else if(ruleAction == Rules.Action.BLUE && !colorSwitch.isColor(ColorSwitch.COLOR.BLUE))
+                            colorSwitch.setColor(ColorSwitch.COLOR.BLUE);
+                        else if(ruleAction == Rules.Action.GREEN && !colorSwitch.isColor(ColorSwitch.COLOR.GREEN))
+                            colorSwitch.setColor(ColorSwitch.COLOR.GREEN);
                     }
                 }
             }

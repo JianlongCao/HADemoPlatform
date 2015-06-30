@@ -20,16 +20,16 @@ public class OpenHabPlatform implements appInterface, Runnable{
     String touser = Settings.Instance().getGlobalConfig().getOpenhab().getXMPPTOUSER();
 
     public OpenHabPlatform() {
-
-        client = new SimpleXMPPClient(user + "@" + server, pwd);
         cmdLists = new LinkedBlockingDeque<>();
     }
 
     @Override
     public void start() {
         if(running == false){
-            System.out.println("App: OpenHab platform is starting");
+            System.out.println("App: Waiting for connect OpenHab Server");
             running = true;
+            client = new SimpleXMPPClient(user + "@" + server, pwd);
+            System.out.println("App: OpenHab Server is starting");
             new Thread(this).start();
             new Thread(new CommandParser()).start();
         }
@@ -38,6 +38,7 @@ public class OpenHabPlatform implements appInterface, Runnable{
     @Override
     public void stop() {
         running = false;
+        client.disconnect();
         cmdLists.clear();
         System.out.println("App: OpenHab platform is stopped");
     }

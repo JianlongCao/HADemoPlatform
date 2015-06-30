@@ -1,5 +1,6 @@
 package com.cisco.demo.excutionplatform;
 
+import com.cisco.demo.generaladapter.ColorSwitch;
 import com.cisco.demo.generaladapter.Device;
 
 import java.util.List;

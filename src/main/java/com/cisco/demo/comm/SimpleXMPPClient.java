@@ -230,11 +230,13 @@ public class SimpleXMPPClient {
 	 * Disconnects the client.
 	 */
 	public void disconnect() {
-		for (MultiUserChat cr: chatRooms)	
-			if (cr!=null && cr.isJoined()) {
-				cr.leave();
-			}
-		chatRooms = null;
+		if(chatRooms != null) {
+			for (MultiUserChat cr : chatRooms)
+				if (cr != null && cr.isJoined()) {
+					cr.leave();
+				}
+			chatRooms = null;
+		}
 		if (connection.isAuthenticated()) {
 			connection.disconnect();
 			connection = null;

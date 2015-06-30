@@ -9,7 +9,36 @@
       },
       "Then": {
         "addr": "0017880100e7821e",
-        "action": "off",
+        "action": "on",
+        "name": "Hue",
+        "radio": "zb"
+      }
+    },
+    {
+      "If": {
+        "addr": "2",
+        "action": "close",
+        "name": "ContactSwitch",
+        "radio": "zw"
+      },
+      "Then": {
+        "addr": "0017880100e7821e",
+        "action": "green",
+        "name": "Hue",
+        "radio": "zb"
+      }
+    },
+
+    {
+      "If": {
+        "addr": "2",
+        "action": "open",
+        "name": "ContactSwitch",
+        "radio": "zw"
+      },
+      "Then": {
+        "addr": "0017880100e7821e",
+        "action": "red",
         "name": "Hue",
         "radio": "zb"
       }
@@ -26,9 +55,10 @@
         "action": "blink",
         "name": "Hue",
         "radio": "zb",
-        "blink_interval":200,
-        "blink_times":5
+        "blink_interval":1000,
+        "blink_times":3
       }
     }
+
   ]
 }

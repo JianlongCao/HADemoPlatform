@@ -91,7 +91,9 @@ public class Rules {
         OPEN("open"),
         CLOSE("close"),
         BLINK("blink"),
-        COLOR("color"),
+        RED("red"),
+        GREEN("green"),
+        BLUE("blue"),
         LEVEL("level"),
         ON("on"),
         OFF("off");
@@ -121,7 +123,7 @@ public class Rules {
 
     public enum ActionBelonging{
         ONOFFSWITCH("onoffswitch", Action.ON, Action.OFF, Action.BLINK),
-        COLORSWITCH("colorswitch", Action.COLOR),
+        COLORSWITCH("colorswitch", Action.RED, Action.BLUE, Action.GREEN),
         LEVELSWITCH("levelswitch", Action.LEVEL),
         OPENCLOSESENSOR("openclosesensor", Action.OPEN, Action.CLOSE),;
 

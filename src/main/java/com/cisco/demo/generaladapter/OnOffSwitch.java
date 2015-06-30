@@ -58,6 +58,7 @@ public class OnOffSwitch extends Device {
                 e.printStackTrace();
             }
         }
+        turn(state);
     }
 
 }

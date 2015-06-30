@@ -3,16 +3,34 @@ package com.cisco.demo.generaladapter;
 import com.cisco.demo.excutionplatform.ExcutionUnit;
 import com.cisco.demo.excutionplatform.ExcutionUnitBulder;
 
+import static java.lang.Math.abs;
+
 public class ColorSwitch extends Device {
 
-    private int hue=0, sat=0, bri=0;
+    private int hue = 0, sat = 0, bri = 0;
+
+    public enum COLOR {
+        RED(new int[]{9, 96, 90}),
+        GREEN(new int[]{140, 96, 90}),
+        BLUE(new int[]{263, 99, 90});
+
+        private int[] hsbs;
+
+        COLOR(int[] hsbs) {
+            this.hsbs = hsbs;
+        }
+
+        public int[] getHsbs() {
+            return this.hsbs;
+        }
+    }
 
 
     public ColorSwitch(String addr, String radio, String type) {
         super(addr, radio, type);
     }
 
-    public ColorSwitch(String addr, String radio, String type, int hue, int sat, int bri){
+    public ColorSwitch(String addr, String radio, String type, int hue, int sat, int bri) {
         super(addr, radio, type);
         this.hue = hue;
         this.sat = sat;
@@ -36,6 +54,18 @@ public class ColorSwitch extends Device {
         excutionUnit.color(hue, sat, brightness);
     }
 
+
+    public void setColor(COLOR c) {
+        setColor(c.getHsbs()[0], c.getHsbs()[1], c.getHsbs()[2]);
+    }
+
+    public boolean isColor(ColorSwitch.COLOR color) {
+        int err1 = abs(color.getHsbs()[0] - hue);
+        int err2 = abs(color.getHsbs()[1] - sat);
+        int err3 = abs(color.getHsbs()[2] - bri);
+        if(err1 +err2 + err3 >10) return false;
+        return true;
+    }
 //
 //    public void setColor(float[] HSVcolor)
 //    {

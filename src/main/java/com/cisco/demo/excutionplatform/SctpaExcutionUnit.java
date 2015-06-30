@@ -3,6 +3,7 @@ package com.cisco.demo.excutionplatform;
 import com.cisco.demo.comm.HTTPHelper;
 import com.cisco.demo.comm.HttpCmd;
 import com.cisco.demo.core.Settings;
+import com.cisco.demo.generaladapter.ColorSwitch;
 import com.cisco.demo.generaladapter.Device;
 import com.google.gson.Gson;
 import org.apache.http.HttpResponse;
@@ -15,6 +16,8 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.cisco.demo.generaladapter.ColorSwitch.COLOR.*;
 
 public class SctpaExcutionUnit implements ExcutionUnit{
 
@@ -54,10 +57,10 @@ public class SctpaExcutionUnit implements ExcutionUnit{
 
     @Override
     public void color(int hue, int sat, int brightness) {
-        if(device == null) return;
-        short h = (short)((hue)*1.0/360*255);
-        short s = (short)((sat)*1.0/100*255);
-        short b = (short)((brightness));
+        if (device == null) return;
+        short h = (short) ((hue) * 1.0 / 360 * 255);
+        short s = (short) ((sat) * 1.0 / 100 * 255);
+        short b = (short) ((brightness));
         JSONObject color_value = new JSONObject();
         color_value.put("hue", new Short((short) h));
         color_value.put("saturation", new Short((short) s));
