@@ -8,7 +8,16 @@
 	<name>Ciscodemo</name>
 	<url>http://maven.apache.org</url>
 
-	<build>
+    <repositories>
+        <repository>
+            <id>maven-restlet</id>
+            <name>Public online Restlet repository</name>
+            <url>http://maven.restlet.com</url>
+        </repository>
+    </repositories>
+
+
+    <build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -90,5 +99,17 @@
             <artifactId>gson</artifactId>
             <version>1.7.1</version>
         </dependency>
-	</dependencies>
+        <!-- Restlet for Java Standard Edition -->
+        <dependency>
+            <groupId>org.restlet.jse</groupId>
+            <artifactId>org.restlet</artifactId>
+            <version>2.1.2</version>
+        </dependency>
+        <!-- "HTTP engine capable of handling enormous loads" -->
+        <dependency>
+            <groupId>org.restlet.jse</groupId>
+            <artifactId>org.restlet.ext.simple</artifactId>
+            <version>2.1.2</version>
+        </dependency>
+    </dependencies>
 </project>

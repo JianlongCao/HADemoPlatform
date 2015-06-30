@@ -88,24 +88,28 @@ public class Rules {
     }
 
     public enum Action {
-        OPEN("open"),
-        CLOSE("close"),
+        OPEN("open", true),
+        CLOSE("close" , false),
         BLINK("blink"),
         RED("red"),
         GREEN("green"),
         BLUE("blue"),
         LEVEL("level"),
-        ON("on"),
-        OFF("off");
+        ON("on", true),
+        OFF("off", false);
 
         private final String name;
+        private boolean state = false;
         Action(String name) {
             this.name = name;
         }
+        Action(String name, boolean state) { this.name = name; this.state = state;};
 
         public String getname() {
             return this.name;
         }
+
+        public boolean getState() {return this.state;};
         // Reverse-lookup map for getting a day from an abbreviation
         private static final Map<String, Action> lookup = new HashMap<String, Action>();
 

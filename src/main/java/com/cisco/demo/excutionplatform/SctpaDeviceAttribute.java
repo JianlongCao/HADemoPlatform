@@ -30,6 +30,22 @@ public class SctpaDeviceAttribute {
         String                state;
         ArrayList<Measurement_Sensor> measurement = null;
         String                subtype;
+
+        public String getType() {
+            return type;
+        }
+
+        public String getState() {
+            return state;
+        }
+
+        public ArrayList<Measurement_Sensor> getMeasurement() {
+            return measurement;
+        }
+
+        public String getSubtype() {
+            return subtype;
+        }
     }
 
 //    public static class Measurement {
@@ -41,6 +57,14 @@ public class SctpaDeviceAttribute {
         String unit;
         String timestamp;
         String name;
+
+        public Object getValue() {
+            return value;
+        }
+
+        public String getName() {
+            return name;
+        }
     }
 
     public static class Measurement_State {

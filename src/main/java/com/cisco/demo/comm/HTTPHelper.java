@@ -4,6 +4,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -90,6 +91,23 @@ public class HTTPHelper implements Runnable{
             try {
                 StringEntity input = new StringEntity(cmd.getEntity());
                 response = client.execute(httpGet);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (ClientProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if(cmd.getMethod().equals("post")) {
+
+            HttpPost httppost = new HttpPost(
+                    cmd.getUri().toLowerCase());
+            try {
+                StringEntity input = new StringEntity(cmd.getEntity());
+                input.setContentType("application/json");
+                httppost.setEntity(input);
+                response = client.execute(httppost);
+
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             } catch (ClientProtocolException e) {

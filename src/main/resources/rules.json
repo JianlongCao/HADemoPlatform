@@ -31,7 +31,7 @@
 
     {
       "If": {
-        "addr": "2",
+        "addr":"2",
         "action": "open",
         "name": "ContactSwitch",
         "radio": "zw"
@@ -55,8 +55,8 @@
         "action": "blink",
         "name": "Hue",
         "radio": "zb",
-        "blink_interval":1000,
-        "blink_times":3
+        "blink_interval":8l00,
+        "blink_times":2
       }
     }
 

@@ -1,5 +1,7 @@
 package com.cisco.demo.generaladapter;
 
+import java.util.ArrayList;
+
 public class Device {
 
     public static final String TYPE_CAMERA = "IPCamera";
@@ -16,6 +18,15 @@ public class Device {
     private String addr;
     private String radio;
     private String type;
+    private ArrayList<String> names;
+
+    public ArrayList<String> getNames() {
+        return names;
+    }
+
+    public void setNames(ArrayList<String> names) {
+        this.names = names;
+    }
 
     private OnOffSwitch onOffSwitch = null;
     private LevelSwitch levelSwitch = null;

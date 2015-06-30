@@ -9,7 +9,7 @@ import java.util.Iterator;
 public class SctpaResponse {
     private SctpaDeviceAttribute device_attrib = null;
     private String          result;
-//    private String          href;
+    private ArrayList<String>          href;
     private String          host_port;
     private String          timestamp;
     private String          json="";
@@ -65,16 +65,22 @@ public class SctpaResponse {
                 }
             }
         }
+        if(href != null && href.size() >1) {
+            for(Device device :devices) {
+                device.setNames(href);
+            }
+        }
+
         return devices;
     }
 
     public String getResult() {
         return result;
     }
-//
-//    public String getHref() {
-//        return href;
-//    }
+
+    public ArrayList<String> getHref() {
+        return href;
+    }
 
     public String getHost_port() {
         return host_port;

@@ -5,6 +5,7 @@ import com.cisco.demo.comm.HttpCmd;
 import com.cisco.demo.core.Settings;
 import com.cisco.demo.generaladapter.ColorSwitch;
 import com.cisco.demo.generaladapter.Device;
+import com.cisco.demo.generaladapter.DeviceListener;
 import com.google.gson.Gson;
 import org.apache.http.HttpResponse;
 import org.json.JSONArray;
@@ -98,6 +99,23 @@ public class SctpaExcutionUnit implements ExcutionUnit{
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public boolean registerListener(String addr, DeviceListener deviceListener) {
+        String registerJson = String.format("'{ \"auth_token\" : \"auth-token-auth_token_auth-token\", \"user_token\" : " +
+                "\"user-token-user_token_user-token\", \"uri\":\"%s/\",\"interests\" : { " +
+                "\"device_discovery\" : [ { \"radio\" : \"zw\" , \"notification_type\" : \"nonstop\" } ] , " +
+                "\"rest_uri\" : [ { \"uri\" : \"%s\", \"notification_type\" " +
+                ": \"nonstop\"} ] } }", "http://64.104.161.69:8111", addr);
+        HttpCmd httpCmd = new HttpCmd("post", "http://64.104.161.59:8090/interests", registerJson);
+        HttpResponse response = HTTPHelper.Instance().excuteHTTPCmd(httpCmd);
+        //sctpa will return unkown error
+//        if (response == null || response.getStatusLine().getStatusCode() != 200) {
+//            return ;
+//        }
+        if(response == null) return false;
+        return true;
     }
 
     private void turn(boolean state) {

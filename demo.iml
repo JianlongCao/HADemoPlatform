@@ -20,5 +20,10 @@
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpasyncclient:4.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore-nio:4.4.1" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:1.7.1" level="project" />
+    <orderEntry type="library" name="Maven: org.restlet.jse:org.restlet:2.1.2" level="project" />
+    <orderEntry type="library" name="Maven: org.restlet.jse:org.restlet.ext.simple:2.1.2" level="project" />
+    <orderEntry type="library" name="Maven: org.simpleframework:simple:4.1.21" level="project" />
+    <orderEntry type="library" name="Maven: org.restlet.jse:org.restlet.ext.ssl:2.1.2" level="project" />
+    <orderEntry type="library" name="Maven: org.jsslutils:jsslutils:1.0.5" level="project" />
   </component>
 </module>
