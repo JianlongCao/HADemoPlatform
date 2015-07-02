@@ -69,6 +69,7 @@ public class HTTPHelper implements Runnable{
     public HttpResponse excuteHTTPCmd(HttpCmd cmd) {
         HttpClient client = HttpClientBuilder.create().build();
         HttpResponse response = null;
+        System.out.println(cmd.toString());
         if(cmd.getMethod().equals("put")) {
 
             HttpPut httpput = new HttpPut(
@@ -80,11 +81,11 @@ public class HTTPHelper implements Runnable{
                 response = client.execute(httpput);
 
             } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             } catch (ClientProtocolException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
         } else if(cmd.getMethod().equalsIgnoreCase("get")){
             HttpGet httpGet = new HttpGet((cmd.getUri().toLowerCase()));
@@ -92,11 +93,11 @@ public class HTTPHelper implements Runnable{
                 StringEntity input = new StringEntity(cmd.getEntity());
                 response = client.execute(httpGet);
             } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             } catch (ClientProtocolException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
         } else if(cmd.getMethod().equals("post")) {
 
@@ -109,11 +110,11 @@ public class HTTPHelper implements Runnable{
                 response = client.execute(httppost);
 
             } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             } catch (ClientProtocolException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
         }
         return response;
@@ -123,6 +124,7 @@ public class HTTPHelper implements Runnable{
         HttpResponse response = null;
         CloseableHttpAsyncClient httpclient = HttpAsyncClients.createDefault();
         httpclient.start();
+        System.out.println(cmd.toString());
         if(cmd.getMethod().equals("put")) {
             HttpPut httpput = new HttpPut(
                     cmd.getUri().toLowerCase());
@@ -132,7 +134,7 @@ public class HTTPHelper implements Runnable{
                 httpput.setEntity(input);
                 httpclient.execute(httpput, null);
             } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
         } else if(cmd.getMethod().equals("get")) {
             HttpGet httpGet = new HttpGet(
@@ -141,9 +143,9 @@ public class HTTPHelper implements Runnable{
             try {
                  response = future.get();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             } catch (ExecutionException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
         }
 //        try {

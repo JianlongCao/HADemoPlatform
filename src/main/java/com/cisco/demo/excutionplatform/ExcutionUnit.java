@@ -12,6 +12,7 @@ public interface ExcutionUnit {
     public void level(int level);
     public void color(int hue, int saturation, int brightness);
     public List<Device> get(String addr, String radio);
-    public boolean registerListener(String addr, DeviceListener deviceListener);
+    public boolean registerListener(String addr, String radio, DeviceListener deviceListener);
+    public boolean setName(String addr, String radio, String name);
 
 }

@@ -8,8 +8,9 @@
   "openhab": {
     "XMPPSERVER": "173.39.210.33",
     "XMPPPORT": 5222,
-    "XMPPFROMUSER": "clg002",
-    "XMPPTOUSER": "clg003",
+    "APPID": "clg002",
+    "OPENHABID": "clg003",
+    "USERID" : "clg001",
     "XMPPPWD": "Cisco123!"
   }
 }

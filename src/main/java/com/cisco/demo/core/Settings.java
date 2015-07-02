@@ -35,8 +35,8 @@ public class Settings {
   "openhab": {
     "XMPPSERVER": "173.39.210.33",
     "XMPPPORT": 5222,
-    "XMPPFROMUSER": "clg002",
-    "XMPPTOUSER": "clg003",
+    "APPID": "clg002",
+    "OPENHABID": "clg003",
     "XMPPPWD": "Cisco123!"
   }
      */
@@ -69,10 +69,14 @@ public class Settings {
         public static class OPENHAB {
             private String XMPPSERVER = "173.39.210.33";
             private int XMPPPORT = 5222;
-            private String XMPPFROMUSER = "clg002";
-            private String XMPPTOUSER = "clg003";
+            private String APPID = "clg002";
+            private String OPENHABID = "clg003";
+            private String USERID  = "clg001";
             private String XMPPPWD = "Cisco123!";
 
+            public String getUSERID() {
+                return USERID;
+            }
             public String getXMPPSERVER() {
                 return XMPPSERVER;
             }
@@ -81,12 +85,12 @@ public class Settings {
                 return XMPPPORT;
             }
 
-            public String getXMPPFROMUSER() {
-                return XMPPFROMUSER;
+            public String getAPPID() {
+                return APPID;
             }
 
-            public String getXMPPTOUSER() {
-                return XMPPTOUSER;
+            public String getOPENHABID() {
+                return OPENHABID;
             }
 
             public String getXMPPPWD() {
@@ -98,8 +102,8 @@ public class Settings {
                 return "OPENHAB{" +
                         "XMPPSERVER='" + XMPPSERVER + '\'' +
                         ", XMPPPORT=" + XMPPPORT +
-                        ", XMPPFROMUSER='" + XMPPFROMUSER + '\'' +
-                        ", XMPPTOUSER='" + XMPPTOUSER + '\'' +
+                        ", APPID='" + APPID + '\'' +
+                        ", OPENHABID='" + OPENHABID + '\'' +
                         ", XMPPPWD='" + XMPPPWD + '\'' +
                         '}';
             }
@@ -107,6 +111,11 @@ public class Settings {
 
         public static class SCTPA {
             private String SERVERIP = "http://64.104.161.59:8090";
+            private String HOSTIP = null;
+
+            public String getHOSTIP() {
+                return HOSTIP;
+            }
 
             public String getSERVERIP() {
                 return SERVERIP;

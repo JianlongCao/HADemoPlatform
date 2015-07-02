@@ -1,14 +1,15 @@
 package com.cisco.demo.appplatform;
 
+import com.cisco.demo.comm.SimpleXMPPClient;
+import com.cisco.demo.core.Settings;
 import com.cisco.demo.core.Utils;
 import com.cisco.demo.generaladapter.*;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
-import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class RuleEngine implements Runnable {
@@ -17,6 +18,8 @@ public class RuleEngine implements Runnable {
     private boolean Running = false;
 
     public static Map<String,DeviceListener> registerList = new ConcurrentHashMap<>();
+    String userid = Settings.Instance().getGlobalConfig().getOpenhab().getUSERID();
+    String server = Settings.Instance().getGlobalConfig().getOpenhab().getXMPPSERVER();
 
     public void addRule(Rules.SimpleRule rule) {
         if (rule != null) {
@@ -48,10 +51,13 @@ public class RuleEngine implements Runnable {
                     if(devices == null || devices.size() == 0) continue;
                     ArrayList<String> alias = devices.get(0).getNames();
                     if(alias != null && alias.size() > 1) {
+                        if(!alias.contains(radio+"_"+addr)) {
+                            devices.get(0).setName(radio + "_" + addr);
+                        }
                         DeviceListener deviceListener = new SimpleDeviceListener();
-                        boolean ret = GeneralPlatform.Instance().registerListener(alias.get(1), deviceListener);
-                        if(ret)
-                            registerList.put(radio +"/" + addr, deviceListener);
+                        boolean ret = GeneralPlatform.Instance().registerListener(addr, radio, deviceListener);
+                        if (ret)
+                            registerList.put(radio + "/" + addr, deviceListener);
                     }
                 }
             }
@@ -175,10 +181,19 @@ public class RuleEngine implements Runnable {
                     if(filter != 0 && this.oldState == state && this.addr == addr)
                         return;
                     if(filter == 0) filter = 1;
+
+                    String message = rule.getIf().getMessage();
+
+                    if (message != null && !message.trim().equals("")) {
+                        SimpleXMPPClient xmppClient = OpenHabPlatform.getXmppClient();
+                        if (xmppClient != null)
+                            xmppClient.sendMessage(userid + "@" + server, message);
+                    }
+
                     String thenAction = rule.getThen().getAction();
                 if(thenAction == null) continue;
                 List<Device> devices = GeneralPlatform.Instance().get(rule.getThen().getAddr(), rule.getThen().getRadio
-                            ());
+                        ());
                 if (devices == null || devices.isEmpty()) continue;
 
                 for (Device device : devices) {

@@ -1,6 +1,6 @@
 package com.cisco.demo.appplatform;
 
-public interface appInterface {
+public interface AppInterface {
 
     public void start();
 

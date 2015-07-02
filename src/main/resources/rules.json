@@ -5,7 +5,8 @@
         "addr": "2",
         "action": "close",
         "name": "ContactSwitch",
-        "radio": "zw"
+        "radio": "zw",
+        "message":"Door closed, check live video : http://64.104.161.111:8080/getcamera"
       },
       "Then": {
         "addr": "0017880100e7821e",
@@ -34,7 +35,8 @@
         "addr":"2",
         "action": "open",
         "name": "ContactSwitch",
-        "radio": "zw"
+        "radio": "zw",
+        "message":"Door open, check live video : http://64.104.161.111:8080/getcamera"
       },
       "Then": {
         "addr": "0017880100e7821e",
@@ -55,7 +57,7 @@
         "action": "blink",
         "name": "Hue",
         "radio": "zb",
-        "blink_interval":8l00,
+        "blink_interval":800,
         "blink_times":2
       }
     }

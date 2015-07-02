@@ -34,4 +34,13 @@ public class HttpCmd {
     public void setEntity(String entity) {
         this.entity = entity;
     }
+
+    @Override
+    public String toString() {
+        return "HttpCmd{" +
+                "method='" + method + '\'' +
+                ", uri='" + uri + '\'' +
+                ", entity='" + entity + '\'' +
+                '}';
+    }
 }

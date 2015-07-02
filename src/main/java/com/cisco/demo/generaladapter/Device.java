@@ -1,5 +1,8 @@
 package com.cisco.demo.generaladapter;
 
+import com.cisco.demo.excutionplatform.ExcutionUnit;
+import com.cisco.demo.excutionplatform.ExcutionUnitBulder;
+
 import java.util.ArrayList;
 
 public class Device {
@@ -18,14 +21,15 @@ public class Device {
     private String addr;
     private String radio;
     private String type;
-    private ArrayList<String> names;
+    public ArrayList<String> names;
 
     public ArrayList<String> getNames() {
         return names;
     }
 
-    public void setNames(ArrayList<String> names) {
-        this.names = names;
+    public void setName(String name) {
+        ExcutionUnit excutionUnit = new ExcutionUnitBulder(this).builder();
+        excutionUnit.setName(addr,radio,name);
     }
 
     private OnOffSwitch onOffSwitch = null;

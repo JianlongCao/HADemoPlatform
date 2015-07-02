@@ -3,7 +3,7 @@ package com.cisco.demo.excutionplatform;
 import com.cisco.demo.comm.HTTPHelper;
 import com.cisco.demo.comm.HttpCmd;
 import com.cisco.demo.core.Settings;
-import com.cisco.demo.generaladapter.ColorSwitch;
+import com.cisco.demo.core.Utils;
 import com.cisco.demo.generaladapter.Device;
 import com.cisco.demo.generaladapter.DeviceListener;
 import com.google.gson.Gson;
@@ -18,15 +18,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.cisco.demo.generaladapter.ColorSwitch.COLOR.*;
-
 public class SctpaExcutionUnit implements ExcutionUnit{
 
     private Device device = null;
     String serverIP = Settings.Instance().getGlobalConfig().getSctpa().getSERVERIP();
+    String hostIP = Settings.Instance().getGlobalConfig().getSctpa().getHOSTIP();
 
     public SctpaExcutionUnit(Device device) {
         this.device = device;
+        if(!Utils.checkNotNull(hostIP)){
+            try {
+                hostIP = Utils.Instance().getIp();
+            } catch (Exception e) {
+            }
+        }
     }
 
     public SctpaExcutionUnit() {
@@ -73,48 +78,70 @@ public class SctpaExcutionUnit implements ExcutionUnit{
 
     @Override
     public List<Device> get(String addr, String radio) {
-        String uri = serverIP + "/devices/" + radio + "/"
-                + addr;
-        HttpResponse response = HTTPHelper.Instance().excuteHTTPCmd(new HttpCmd("get", uri, ""));
-        if (response == null || response.getStatusLine().getStatusCode() != 200) {
-            System.out.println("ERROR:Sctpa Server not available or get error response");
-            return null;
-        }
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(
-                    new InputStreamReader((response.getEntity().getContent())));
-            String output;
-            String jsonRes = "";
-            while ((output = br.readLine()) != null) {
-                jsonRes += output;
+        if(Utils.checkNotNull(addr) && Utils.checkNotNull(radio)) {
+            String uri = serverIP + "/devices/" + radio + "/"
+                    + addr;
+            HttpResponse response = HTTPHelper.Instance().excuteHTTPCmd(new HttpCmd("get", uri, ""));
+            if (response == null || response.getStatusLine().getStatusCode() != 200) {
+                System.out.println("ERROR:Sctpa Server not available or get error response");
+                return null;
             }
+            BufferedReader br = null;
+            try {
+                br = new BufferedReader(
+                        new InputStreamReader((response.getEntity().getContent())));
+                String output;
+                String jsonRes = "";
+                while ((output = br.readLine()) != null) {
+                    jsonRes += output;
+                }
 //            System.out.println("From SCTPA :" + jsonRes);
-            Gson gson = new Gson();
-            SctpaResponse responseData = gson.fromJson(jsonRes, SctpaResponse.class);
-            responseData.setJSONRawPacket(jsonRes);
-            return responseData.getDevice();
+                Gson gson = new Gson();
+                SctpaResponse responseData = gson.fromJson(jsonRes, SctpaResponse.class);
+                responseData.setJSONRawPacket(jsonRes);
+                return responseData.getDevice();
 
-        } catch (IOException e) {
-            e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+
         return null;
     }
 
     @Override
-    public boolean registerListener(String addr, DeviceListener deviceListener) {
-        String registerJson = String.format("'{ \"auth_token\" : \"auth-token-auth_token_auth-token\", \"user_token\" : " +
-                "\"user-token-user_token_user-token\", \"uri\":\"%s/\",\"interests\" : { " +
-                "\"device_discovery\" : [ { \"radio\" : \"zw\" , \"notification_type\" : \"nonstop\" } ] , " +
-                "\"rest_uri\" : [ { \"uri\" : \"%s\", \"notification_type\" " +
-                ": \"nonstop\"} ] } }", "http://64.104.161.69:8111", addr);
-        HttpCmd httpCmd = new HttpCmd("post", "http://64.104.161.59:8090/interests", registerJson);
-        HttpResponse response = HTTPHelper.Instance().excuteHTTPCmd(httpCmd);
-        //sctpa will return unkown error
+    public boolean registerListener(String addr, String radio, DeviceListener deviceListener) {
+
+        if(Utils.checkNotNull(addr) && Utils.checkNotNull(radio) && deviceListener != null) {
+            String registerJson = String.format("'{ \"auth_token\" : \"auth-token-auth_token_auth-token\", \"user_token\" : " +
+                    "\"user-token-user_token_user-token\", \"uri\":\"%s/\",\"interests\" : { " +
+                    "\"device_discovery\" : [ { \"radio\" : \"%s\" , \"notification_type\" : \"nonstop\" } ] , " +
+                    "\"rest_uri\" : [ { \"uri\" : \"%s\", \"notification_type\" " +
+                    ": \"nonstop\"} ] } }", radio, hostIP + ":8111", addr);
+            HttpCmd httpCmd = new HttpCmd("post", serverIP + "/interests", registerJson);
+            HttpResponse response = HTTPHelper.Instance().excuteHTTPCmd(httpCmd);
+            //sctpa will return unkown error
 //        if (response == null || response.getStatusLine().getStatusCode() != 200) {
 //            return ;
 //        }
-        if(response == null) return false;
+            if(response == null) return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean setName(String addr, String radio, String name) {
+        if(Utils.checkNotNull(name)) {
+            String nameJson = String.format("\"{ \\\"devices\\\" : [ { \\\"device_attrib\\\" : { \\\"radio\\\" : " +
+                    "\\\"%s\\\" , " +
+                    "\\\"addr\\\" : \\\"%s\\\", \\\"sensor_type\\\" : \\\"motion\\\", \\\"sensor_subtype\\\" : " +
+                    "\\\"1\\\" } , \\\"logical_attrib\\\" : { \\\"domain\\\" : \\\"alarm\\\" , \\\"location\\\" : " +
+                    "\\\"frontdoor\\\" , \\\"class\\\" : \\\"motiondetect\\\" , \\\"name\\\" : \\\"%s\\\" , " +
+                            "\\\"priority\\\" : 0 } } ] }\"",
+                    radio,addr, name);
+            HttpCmd httpCmd = new HttpCmd("post", serverIP + "/devices", nameJson);
+            HttpResponse response = HTTPHelper.Instance().excuteHTTPCmd(httpCmd);
+        }
         return true;
     }
 

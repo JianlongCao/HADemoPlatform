@@ -1,11 +1,11 @@
 package com.cisco.demo.core;
 
+import com.cisco.demo.appplatform.AppInterface;
 import com.cisco.demo.appplatform.OpenHabPlatform;
 import com.cisco.demo.appplatform.RuleEngine;
 import com.cisco.demo.comm.RestServer;
 
 import java.util.Scanner;
-import java.util.Set;
 
 public class MainActivity {
 
@@ -17,7 +17,7 @@ public class MainActivity {
     public static void main(String[] args) {
 
 
-        OpenHabPlatform openHabPlatform = new OpenHabPlatform();
+        AppInterface openHabPlatform = new OpenHabPlatform();
         openHabPlatform.start();
 
         RuleEngine ruleEngine = new RuleEngine();

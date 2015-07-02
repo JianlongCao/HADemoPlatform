@@ -48,6 +48,12 @@ public class Rules {
             private String radio;
             private String action;
             private String name;
+            private String message;
+
+            public String getMessage() {
+                return message;
+            }
+
             private int blink_times = 3;
             private int blink_interval = 200;
 

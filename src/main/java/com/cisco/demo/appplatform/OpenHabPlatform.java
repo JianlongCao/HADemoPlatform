@@ -10,14 +10,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingDeque;
 
-public class OpenHabPlatform implements appInterface, Runnable{
-    private SimpleXMPPClient client = null;
+public class OpenHabPlatform implements AppInterface, Runnable{
+    private static SimpleXMPPClient client = null;
     private LinkedBlockingDeque<String> cmdLists = null;
     boolean running = false;
-    String user = Settings.Instance().getGlobalConfig().getOpenhab().getXMPPFROMUSER();
+    String user = Settings.Instance().getGlobalConfig().getOpenhab().getAPPID();
     String server = Settings.Instance().getGlobalConfig().getOpenhab().getXMPPSERVER();
     String pwd = Settings.Instance().getGlobalConfig().getOpenhab().getXMPPPWD();
-    String touser = Settings.Instance().getGlobalConfig().getOpenhab().getXMPPTOUSER();
+    String touser = Settings.Instance().getGlobalConfig().getOpenhab().getOPENHABID();
 
     public OpenHabPlatform() {
         cmdLists = new LinkedBlockingDeque<>();
@@ -56,6 +56,9 @@ public class OpenHabPlatform implements appInterface, Runnable{
 
     }
 
+    public static SimpleXMPPClient getXmppClient() {
+        return client;
+    }
     private class CommandParser implements Runnable{
 
         @Override
