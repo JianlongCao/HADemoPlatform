@@ -32,6 +32,7 @@ public class SctpaExcutionUnit implements ExcutionUnit{
             } catch (Exception e) {
             }
         }
+        if(!hostIP.contains("http://")) hostIP = "http://" + hostIP;
     }
 
     public SctpaExcutionUnit() {
@@ -110,14 +111,15 @@ public class SctpaExcutionUnit implements ExcutionUnit{
     }
 
     @Override
-    public boolean registerListener(String addr, String radio, DeviceListener deviceListener) {
+    public boolean registerListener(String addr, String radio, String name, DeviceListener deviceListener) {
 
-        if(Utils.checkNotNull(addr) && Utils.checkNotNull(radio) && deviceListener != null) {
-            String registerJson = String.format("'{ \"auth_token\" : \"auth-token-auth_token_auth-token\", \"user_token\" : " +
+        if(Utils.checkNotNull(addr) && Utils.checkNotNull(radio) && Utils.checkNotNull(name) && deviceListener !=
+                null) {
+            String registerJson = String.format("{ \"auth_token\" : \"auth-token-auth_token_auth-token\", \"user_token\" : " +
                     "\"user-token-user_token_user-token\", \"uri\":\"%s/\",\"interests\" : { " +
                     "\"device_discovery\" : [ { \"radio\" : \"%s\" , \"notification_type\" : \"nonstop\" } ] , " +
                     "\"rest_uri\" : [ { \"uri\" : \"%s\", \"notification_type\" " +
-                    ": \"nonstop\"} ] } }", radio, hostIP + ":8111", addr);
+                    ": \"nonstop\"} ] } }", hostIP + ":8111", radio, name);
             HttpCmd httpCmd = new HttpCmd("post", serverIP + "/interests", registerJson);
             HttpResponse response = HTTPHelper.Instance().excuteHTTPCmd(httpCmd);
             //sctpa will return unkown error
@@ -132,15 +134,14 @@ public class SctpaExcutionUnit implements ExcutionUnit{
     @Override
     public boolean setName(String addr, String radio, String name) {
         if(Utils.checkNotNull(name)) {
-            String nameJson = String.format("\"{ \\\"devices\\\" : [ { \\\"device_attrib\\\" : { \\\"radio\\\" : " +
-                    "\\\"%s\\\" , " +
-                    "\\\"addr\\\" : \\\"%s\\\", \\\"sensor_type\\\" : \\\"motion\\\", \\\"sensor_subtype\\\" : " +
-                    "\\\"1\\\" } , \\\"logical_attrib\\\" : { \\\"domain\\\" : \\\"alarm\\\" , \\\"location\\\" : " +
-                    "\\\"frontdoor\\\" , \\\"class\\\" : \\\"motiondetect\\\" , \\\"name\\\" : \\\"%s\\\" , " +
-                            "\\\"priority\\\" : 0 } } ] }\"",
-                    radio,addr, name);
+            String nameJson = String.format("{ \"devices\" : [ { \"device_attrib\" : { \"radio\" : \"%s\" , \"addr\" " +
+                            "" + ":" + " \"%s\", \"sensor_type\" : \"openclose\", \"sensor_subtype\" : \"1\" } , " +
+                            "\"logical_attrib\" : { \"domain\" : \"alarm\" , \"location\" : \"frontdoor\" , \"class\" : \"motiondetect\" , \"name\" : \"%s\" , \"priority\" : 0 } } ] }",
+                    radio, addr, name);
+
             HttpCmd httpCmd = new HttpCmd("post", serverIP + "/devices", nameJson);
             HttpResponse response = HTTPHelper.Instance().excuteHTTPCmd(httpCmd);
+            return true;
         }
         return true;
     }

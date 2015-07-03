@@ -60,8 +60,4 @@ public class GeneralPlatform {
         return excutionUnit.get(addr, radio);
     }
 
-    public boolean registerListener(String addr, String radio, DeviceListener dsl) {
-        ExcutionUnit excutionUnit = new ExcutionUnitBulder().builder();
-        return excutionUnit.registerListener(addr, radio, dsl);
-    }
 }

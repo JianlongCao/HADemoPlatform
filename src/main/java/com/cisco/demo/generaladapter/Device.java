@@ -1,7 +1,11 @@
 package com.cisco.demo.generaladapter;
 
+import com.cisco.demo.comm.HTTPHelper;
+import com.cisco.demo.comm.HttpCmd;
+import com.cisco.demo.core.Utils;
 import com.cisco.demo.excutionplatform.ExcutionUnit;
 import com.cisco.demo.excutionplatform.ExcutionUnitBulder;
+import org.apache.http.HttpResponse;
 
 import java.util.ArrayList;
 
@@ -88,6 +92,13 @@ public class Device {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public boolean registerListener(DeviceListener deviceListener) {
+
+        ExcutionUnit excutionUnit = new ExcutionUnitBulder(this).builder();
+        if(names == null || names.size() <= 1) return false;
+        return excutionUnit.registerListener(addr, radio, names.get(1), deviceListener);
     }
 }
 

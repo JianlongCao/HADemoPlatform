@@ -65,7 +65,7 @@ public class SctpaResponse {
                 }
             }
         }
-        if(href != null && href.size() >1) {
+        if(href != null && href.size() >= 1) {
             for(Device device :devices) {
                 device.names = href;
             }

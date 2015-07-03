@@ -50,14 +50,23 @@ public class RuleEngine implements Runnable {
                     List<Device> devices = GeneralPlatform.Instance().get(rule.getIf().getAddr(), rule.getIf().getRadio());
                     if(devices == null || devices.size() == 0) continue;
                     ArrayList<String> alias = devices.get(0).getNames();
-                    if(alias != null && alias.size() > 1) {
-                        if(!alias.contains(radio+"_"+addr)) {
-                            devices.get(0).setName(radio + "_" + addr);
+                    if(alias != null && alias.size() >= 1) {
+                        boolean bFindAlias = false;
+                        for(String name : alias) {
+                            if(name.contains(radio+ "_" + addr)) {
+                                bFindAlias = true;
+                            }
                         }
-                        DeviceListener deviceListener = new SimpleDeviceListener();
-                        boolean ret = GeneralPlatform.Instance().registerListener(addr, radio, deviceListener);
-                        if (ret)
-                            registerList.put(radio + "/" + addr, deviceListener);
+
+                        if(!bFindAlias){
+                            devices.get(0).setName(radio+ "_" + addr);
+                            continue;
+                        } else {
+                            DeviceListener deviceListener = new SimpleDeviceListener();
+                            boolean ret = devices.get(0).registerListener(deviceListener);
+                            if (ret)
+                                registerList.put(addr, deviceListener);
+                        }
                     }
                 }
             }
