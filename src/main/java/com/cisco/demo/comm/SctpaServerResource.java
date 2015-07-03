@@ -49,7 +49,7 @@ public class SctpaServerResource extends ServerResource{
             if(sda != null) {
                 String addr = sda.getAddr();
                 String radio = sda.getRadio();
-                DeviceListener deviceListener = RuleEngine.registerList.get(radio + "/" +addr);
+                DeviceListener deviceListener = RuleEngine.registerList.get(addr);
                 if(deviceListener == null) return;
                 JsonElement je_sensors = object.get("sensors");
                 if(je_sensors == null) return;
