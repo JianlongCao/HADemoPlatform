@@ -71,7 +71,7 @@ public class RuleEngine implements Runnable {
                 }
             }
             try {
-                Thread.sleep(2000);
+                Thread.sleep(4000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -148,7 +148,7 @@ public class RuleEngine implements Runnable {
 
     public void populateRules(String filename) {
         String json_rules = Utils.Instance().getFile(filename);
-        if(!json_rules.equals("")) {
+        if(Utils.checkNotNull(json_rules)) {
             Gson gson = new Gson();
             Rules rules = gson.fromJson(json_rules, Rules.class);
             if(rules != null && rules.getRules() != null) {
